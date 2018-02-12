@@ -131,8 +131,7 @@ After flannel has acquired the subnet and configured backend, it will write out 
 
 ### Multiple networks
 
-`flanneld`不支持在一个daemon进程中运行`multiple networks`(使用多个backend？)，但它支持运行多个配置不同的`flanneld daemon`.  
- **The -subnet-file and -etcd-prefix options should be used to "namespace" the different daemons.**  
+`flanneld`不支持在一个daemon进程中运行`multiple networks`(使用多个backend？)，但它支持运行多个配置不同的`flanneld daemon`. 通过`-subnet-file`和`-etcd-prefix`选项来指定不同的`flanneld daemon`.  
  ```
  flanneld -subnet-file /vxlan.env -etcd-prefix=/vxlan/network
  ```

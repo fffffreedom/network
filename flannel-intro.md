@@ -86,9 +86,11 @@ unless a different renewal margin is set with the `--subnet-lease-renew-margin` 
 #### iptables-resync是iptable规则重新同步的间隔，如果大量的进程争夺`iptables lock`，可以增大这个值。  
 #### 上面讲到的命令行选项，可以通过指定环境变量来设置！例如：  
 ```
---etcd-endpoints=http://10.0.0.2:2379 is equivalent to FLANNELD_ETCD_ENDPOINTS=http://10.0.0.2:2379 environment variable
+--etcd-endpoints=http://10.0.0.2:2379
+is equivalent to:  
+FLANNELD_ETCD_ENDPOINTS=http://10.0.0.2:2379 environment variable
 ```
-规则如下：**将选项字母改为大写，并将中划线`-`改为下划线，再在选项前面加上FLANNEL_**  
+**规则如下：将选项字母改为大写，并将中划线`-`改为下划线，再在选项前面加上FLANNEL_**  
 
 ## Health Check （healthz）
 

@@ -46,4 +46,54 @@ unless a different renewal margin is set with the `--subnet-lease-renew-margin` 
 
 子网租约的有效期为24小时，默认情况下，租约会在截止前1小时被续约！除非配置了`--subnet-lease-renew-margin`选项。  
 
-### 
+### Example configuration JSON
+```
+{
+	"Network": "10.0.0.0/8",
+	"SubnetLen": 20,
+	"SubnetMin": "10.10.0.0",
+	"SubnetMax": "10.99.0.0",
+	"Backend": {
+		"Type": "udp",
+		"Port": 7890
+	}
+}
+```
+
+## Key command line options
+
+```
+--public-ip="": IP accessible by other nodes for inter-host communication. Defaults to the IP of the interface being used for communication.
+--etcd-endpoints=http://127.0.0.1:4001: a comma-delimited list of etcd endpoints.
+--etcd-prefix=/coreos.com/network: etcd prefix.
+--etcd-keyfile="": SSL key file used to secure etcd communication.
+--etcd-certfile="": SSL certification file used to secure etcd communication.
+--etcd-cafile="": SSL Certificate Authority file used to secure etcd communication.
+--kube-subnet-mgr: Contact the Kubernetes API for subnet assignment instead of etcd.
+--iface="": interface to use (IP or name) for inter-host communication. Defaults to the interface for the default route on the machine. This can be specified multiple times to check each option in order. Returns the first match found.
+--iface-regex="": regex expression to match the first interface to use (IP or name) for inter-host communication. If unspecified, will default to the interface for the default route on the machine. This can be specified multiple times to check each regex in order. Returns the first match found. This option is superseded by the iface option and will only be used if nothing matches any option specified in the iface options.
+--iptables-resync=5: resync period for iptables rules, in seconds. Defaults to 5 seconds, if you see a large amount of contention for the iptables lock increasing this will probably help.
+--subnet-file=/run/flannel/subnet.env: filename where env variables (subnet and MTU values) will be written to.
+--subnet-lease-renew-margin=60: subnet lease renewal margin, in minutes.
+--ip-masq=false: setup IP masquerade for traffic destined for outside the flannel network. Flannel assumes that the default policy is ACCEPT in the NAT POSTROUTING chain.
+-v=0: log level for V logs. Set to 1 to see messages related to data path.
+--healthz-ip="0.0.0.0": The IP address for healthz server to listen (default "0.0.0.0")
+--healthz-port=0: The port for healthz server to listen(0 to disable)
+--version: print version and exit
+```
+
+#### MTU是由flannel计算出来的，它的值保存在`subnet.env`里，这个值不能被修改！  
+#### iptables-resync是iptable规则重新同步的间隔，如果大量的进程争夺`iptables lock`，可以增大这个值。  
+#### 上面讲到的命令行选项，可以通过指定环境变量来设置！例如：  
+```
+--etcd-endpoints=http://10.0.0.2:2379 is equivalent to FLANNELD_ETCD_ENDPOINTS=http://10.0.0.2:2379 environment variable
+```
+规则如下：**将选项字母改为大写，并将中划线`-`改为下划线，再在选项前面加上FLANNEL_**  
+
+## Health Check （healthz）
+
+Flannel provides a health check http endpoint healthz.  Currently this endpoint will blindly return http status ok(i.e. 200) when flannel is running. This feature is by default disabled. **Set healthz-port to a non-zero value will enable a healthz server for flannel**.  
+
+
+
+

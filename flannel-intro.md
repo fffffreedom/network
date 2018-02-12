@@ -123,7 +123,8 @@ Once you have pushed configuration JSON to etcd, you can start flanneld.
 If you published your config at the default location, you can start flanneld with no arguments.  
 
 Flannel will acquire a subnet lease, configure its routes based on other leases in the overlay network and start routing packets.  
+It will also monitor etcd for new members of the network and adjust the routes accordingly.  
+路由是动态调整的！添加或者删除。  
 
-It will also monitor etcd for new members of the network and adjust the routes accordingly.  
-路由是动态调整的！  
+
 

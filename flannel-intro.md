@@ -96,6 +96,34 @@ FLANNELD_ETCD_ENDPOINTS=http://10.0.0.2:2379 environment variable
 
 Flannel provides a health check http endpoint healthz.  Currently this endpoint will blindly return http status ok(i.e. 200) when flannel is running. This feature is by default disabled. **Set healthz-port to a non-zero value will enable a healthz server for flannel**.  
 
+## Backends
 
+> https://github.com/coreos/flannel/blob/master/Documentation/backends.md  
 
+`flannel`支持多个backends，一旦配置好，在运行时是不能改变的！  
+
+### VXLAN
+VXLAN is the recommended choice. Use in-kernel VXLAN to encapsulate the packets.  
+据说性能太差了！  
+
+### host-gw（需要主机在二层连通）
+host-gw is recommended for more experienced users who want the performance improvement and whose infrastructure support it (typically it can't be used in cloud environments).  
+
+Use host-gw to create IP routes to subnets via remote machine IPs. **Requires direct layer2 connectivity between hosts running flannel.** host-gw provides good performance, with few dependencies, and easy set up.  
+
+### udp
+UDP is suggested for debugging only or for very old kernels that don't support VXLAN.  
+
+### others
+AWS, GCE, and AliVPC are experimental and unsupported.  
+
+## 运行flannel
+
+Once you have pushed configuration JSON to etcd, you can start flanneld. 
+If you published your config at the default location, you can start flanneld with no arguments.  
+
+Flannel will acquire a subnet lease, configure its routes based on other leases in the overlay network and start routing packets.  
+
+It will also monitor etcd for new members of the network and adjust the routes accordingly.  
+路由是动态调整的！  
 

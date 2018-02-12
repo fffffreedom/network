@@ -1,6 +1,6 @@
-# flannel intro
+# Flannel intro
 
-## readme
+## basic
 
 `flannel`是一个简单、易用的开源工具，可用来配置专为`Kubenetes`设计的第3层网络结构`（layer 3 network fabric）`。  
 
@@ -125,6 +125,17 @@ If you published your config at the default location, you can start flanneld wit
 Flannel will acquire a subnet lease, configure its routes based on other leases in the overlay network and start routing packets.  
 It will also monitor etcd for new members of the network and adjust the routes accordingly.  
 路由是动态调整的！添加或者删除。  
+
+After flannel has acquired the subnet and configured backend, it will write out an environment variable file (/run/flannel/subnet.env by default) with subnet address and MTU that it supports.  
+在分配到子网和配置好backend后，flannel会把配置写入到环境变量文件中，默认是`/run/flannel/subnet.env`，文件中包括子网地址，以及支持的MTU。  
+
+### Multiple networks
+
+`flanneld`不支持在一个daemon进程中运行`multiple networks`(使用多个backend？)，但它支持运行多个配置不同的`flanneld daemon`.  
+ **The -subnet-file and -etcd-prefix options should be used to "namespace" the different daemons.**  
+ ```
+ flanneld -subnet-file /vxlan.env -etcd-prefix=/vxlan/network
+ ```
 
 
 

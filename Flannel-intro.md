@@ -119,6 +119,8 @@ AWS, GCE, and AliVPC are experimental and unsupported.
 
 ## 运行flannel
 
+> https://github.com/coreos/flannel/blob/master/Documentation/running.md  
+
 Once you have pushed configuration JSON to etcd, you can start flanneld. 
 If you published your config at the default location, you can start flanneld with no arguments.  
 
@@ -126,7 +128,7 @@ Flannel will acquire a subnet lease, configure its routes based on other leases 
 It will also monitor etcd for new members of the network and adjust the routes accordingly.  
 路由是动态调整的！添加或者删除。  
 
-After flannel has acquired the subnet and configured backend, it will write out an environment variable file (/run/flannel/subnet.env by default) with subnet address and MTU that it supports.  
+After flannel has acquired the subnet and configured backend, it will write out an environment variable file (/run/flannel/subnet.env by default) with subnet address and MTU that it supports.  
 在分配到子网和配置好backend后，flannel会把配置写入到环境变量文件中，默认是`/run/flannel/subnet.env`，文件中包括子网地址，以及支持的MTU。  
 
 ### Multiple networks
@@ -134,6 +136,15 @@ After flannel has acquired the subnet and configured backend, it will write out 
 `flanneld`不支持在一个daemon进程中运行`multiple networks`(使用多个backend？)，但它支持运行多个配置不同的`flanneld daemon`. 通过`-subnet-file`和`-etcd-prefix`选项来指定不同的`flanneld daemon`.  
  ```
  flanneld -subnet-file /vxlan.env -etcd-prefix=/vxlan/network
+ ```
+ 
+ ### 手动运行
+ 
+ ```
+ 1. 下载二进制文件 flanneld-amd64
+ 2. ./flannel-amd64 # it will hang waiting to talk to etcd
+ 3. 运行etcd
+ 4. 
  ```
 
 

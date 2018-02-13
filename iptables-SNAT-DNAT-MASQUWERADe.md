@@ -1,4 +1,4 @@
-# iptables 中的SNAT 和MASQUWERADE
+# iptables中的SNAT、DNAT和MASQUWERADE
 
 > http://www.cnblogs.com/the-study-of-linux/p/5205168.html  
 

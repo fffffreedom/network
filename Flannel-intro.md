@@ -134,18 +134,89 @@ After flannel has acquired the subnet and configured backend, it will write out 
 ### Multiple networks
 
 `flanneld`不支持在一个daemon进程中运行`multiple networks`(使用多个backend？)，但它支持运行多个配置不同的`flanneld daemon`. 通过`-subnet-file`和`-etcd-prefix`选项来指定不同的`flanneld daemon`.  
- ```
- flanneld -subnet-file /vxlan.env -etcd-prefix=/vxlan/network
- ```
+```
+flanneld -subnet-file /vxlan.env -etcd-prefix=/vxlan/network
+```
+
+### 手动运行
  
- ### 手动运行
- 
- ```
- 1. 下载二进制文件 flanneld-amd64
- 2. ./flannel-amd64 # it will hang waiting to talk to etcd
- 3. 运行etcd
- 4. 
- ```
+#### 下载二进制文件 flanneld-amd64
+```
+wget https://github.com/coreos/flannel/releases/download/v0.8.0/flanneld-amd64 && chmod +x flanneld-amd64  
+```
+#### 运行flannel
+```
+./flannel-amd64 # it will hang waiting to talk to etcd  
+```
+#### 运行etcd
+```
+docker run --rm --net=host quay.io/coreos/etcd
+```
+#### 写入配置到etcd
+Observe that flannel can now talk to etcd, but can't find any config. So write some config. Either get etcdctl from the CoreOS etcd page, or use docker again.  
+```
+docker run --rm --net=host quay.io/coreos/etcd  \
+	etcdctl set /coreos.com/network/config '{ "Network": "10.5.0.0/16", "Backend": {"Type": "vxlan"}}'
+```
 
+现在`flannel`已经开始运行了，它在主机上创建了一个VXLAN隧道设备，并把配置写入subnet config file:  
+```
+cat /var/run/flannel/subnet.env
+FLANNEL_NETWORK=10.5.0.0/16
+FLANNEL_SUBNET=10.5.72.1/24
+FLANNEL_MTU=1450
+FLANNEL_IPMASQ=false
+```
 
+每次`flannel`重新启动时，它会先尝试访问subnet config file中的`FLANNEL_SUBNET`。这样可以阻止每个主机去更新它的网络信息，在租约还没有过期的情况下，
+主机是不能去重新续约的。  
 
+主机在`flannel`运行时重启，`flannel`会重新续租。  
+
+当然，也只在有`FLANNEL_SUBNET`的值有效时（它的值是etcd network的子集，搞清楚etcd network是什么配置！TODO），才会被使用。  
+例如：  
+Subnet config value is 10.5.72.1/24
+```
+cat /var/run/flannel/subnet.env
+FLANNEL_NETWORK=10.5.0.0/16
+FLANNEL_SUBNET=10.5.72.1/24
+FLANNEL_MTU=1450
+FLANNEL_IPMASQ=false
+```
+etcd network value is 10.6.0.0/16. Since 10.5.72.1/24 is outside of this network, a new lease will be allocated.  
+```
+etcdctl get /coreos.com/network/config
+{ "Network": "10.6.0.0/16", "Backend": {"Type": "vxlan"}}
+```
+
+### 网口选择
+
+`flannel`使用选中的interface将自己注册到datastore. 重要的选项是：  
+- iface string: Interface to use (IP or name) for inter-host communication.  
+- public-ip string: IP accessible by other nodes for inter-host communication.  
+
+默认配置，自动检测和这两个标志的组合最终导致以下内容被确定：  
+- An interface (used for MTU detection and selecting the VTEP MAC in VXLAN).  
+- An IP address for that interface.  
+- A public IP that can be used for reaching this node. In `host-gw` it should match the interface address.  
+
+### Making changes at runtime（限制较多）
+- The datastore type cannot be changed.
+- The backend type cannot be changed. (It can be changed if you stop all workloads and restart all flannel daemons.)
+- You can change the subnetlen/subnetmin/subnetmax with a daemon restart. (Subnets can be changed with caution. If pods are already using IP addresses outside the new range they will stop working.)
+- The clusterwide network range cannot be changed (without downtime).  
+
+### 和docker集成
+docker daemon支持使用`--bip`参数来配置docker0网桥的子网。它也支持`--mtu`选项来配置docker0和将要被创建的veth设备的MTU.  
+
+Because flannel writes out the acquired subnet and MTU values into a file, the script starting Docker can source in the values and pass them to Docker daemon:  
+```
+source /run/flannel/subnet.env
+docker daemon --bip=${FLANNEL_SUBNET} --mtu=${FLANNEL_MTU} &
+```
+**Systemd** users can use EnvironmentFile directive in the .service file to pull in /run/flannel/subnet.env
+
+### Zero-downtime restart
+当`flannel`使用除`udp`之外的其它backend，内核会提供data path，而flannel作为control plane. 因此，flannel的重启，甚至是升级，也不会中断现有的网络流量。 然而，在使用vxlan作为backend时，重启或者升级需要在几秒内完成，因为ARP entries会逐渐开始超时，进而需要flanneld去刷新它们。  
+
+另外，为了避免中断flannel重启，配置不能发生改变。  

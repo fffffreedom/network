@@ -2,7 +2,7 @@
 
 > http://www.cnblogs.com/the-study-of-linux/p/5205168.html  
 
-NAT 是 network address translation 的缩写 网络地址转换；网络地址转换主要有两种：SNAT和DNAT,即源地址转换和目标地址转换。  
+NAT 是 network address translation 的缩写 网络地址转换；网络地址转换主要有两种：SNAT和DNAT，即源地址转换和目标地址转换。  
 
 ## SNAT:源地址转换
 

@@ -1,25 +1,12 @@
 # Container Network Interface (CNI)
 
+> https://github.com/containernetworking/cni  
+
 Container Network Interface - networking for Linux containers
 
-> http://www.lijiaocn.com/%E9%A1%B9%E7%9B%AE/2017/05/03/Kubernetes-pod-network.html  
+## what is CNI ?
 
-## cni installation
-
-> https://kubernetes.io/docs/concepts/cluster-administration/network-plugins/  
-
-CNI插件的加载是由kubelet完成的。kubelet默认在/etc/cni/net.d目录寻找配置文件，在/opt/bin/目录中寻找二进制程序文件。  
-
-```
-kubelet \
-	...
-	--network-plugin=cni 
-	--cni-conf-dir=/etc/cni/net.d 
-	--cni-bin-dir=/opt/cni/bin 
-	...
-```
-
-通过`--network-plugin`指定要使用的网络插件类型。kubelet在启动容器的时候调用CNI插件，完成容器网络的设置。  
+CNI (Container Network Interface), a Cloud Native Computing Foundation project, consists of a specification and libraries for writing plugins to configure network interfaces in Linux containers, along with a number of supported plugins.  
 
 ## Network Configuration
 
@@ -100,11 +87,7 @@ Vhostuser - a Dataplane network plugin - Supports OVS-DPDK & VPP
 Amazon ECS CNI Plugins - a collection of CNI Plugins to configure containers with Amazon EC2 elastic network interfaces (ENIs)
 ```
 
-## CNI spec及代码实现
-
-> https://github.com/containernetworking/cni/blob/master/SPEC.md  
-
-CNI spec 定义了一个网络插件的实现标准，网络插件需要是一个可执行程序，它运行时读取环境变量，再进行相应的操作。  
+## CNI代码实现
 
 ### 重要结构体
 

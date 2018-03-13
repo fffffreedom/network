@@ -1,4 +1,6 @@
-# kubernetes的CNI插件初始化与Pod网络设置
+# Container Network Interface (CNI)
+
+Container Network Interface - networking for Linux containers
 
 > http://www.lijiaocn.com/%E9%A1%B9%E7%9B%AE/2017/05/03/Kubernetes-pod-network.html  
 

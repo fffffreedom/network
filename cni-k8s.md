@@ -1,4 +1,4 @@
-#　kubernetes的CNI插件初始化与Pod网络设置  
+# kubernetes的CNI插件初始化与Pod网络设置  
 
 ## cni installation
 

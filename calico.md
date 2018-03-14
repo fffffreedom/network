@@ -20,9 +20,9 @@ kubectl apply -f https://docs.projectcalico.org/v3.0/getting-started/kubernetes/
 
 #### Install Calico
 
-To install Calico:
-    - Download [calico.yaml](https://docs.projectcalico.org/v3.0/getting-started/kubernetes/installation/hosted/calico.yaml)  
-    - Configure etcd_endpoints in the provided ConfigMap to match your etcd cluster.  
+To install Calico:  
+  - Download [calico.yaml](https://docs.projectcalico.org/v3.0/getting-started/kubernetes/installation/hosted/calico.yaml)  
+  - Configure etcd_endpoints in the provided ConfigMap to match your etcd cluster.  
     
 Then simply apply the manifest: 
 ```
@@ -42,10 +42,6 @@ The above manifest supports a number of configuration options documented [here](
 ### [Kubernetes Datastore](https://docs.projectcalico.org/v3.0/getting-started/kubernetes/installation/hosted/kubernetes-datastore/)
 
 此方法和kubernetes集群共用etcd集群。  
-
-## 
-
-
 
 ## other
 

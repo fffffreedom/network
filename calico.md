@@ -43,9 +43,19 @@ The above manifest supports a number of configuration options documented [here](
 
 此方法和kubernetes集群共用etcd集群。  
 
+## configuration
+
+### [calico/node](https://docs.projectcalico.org/v3.0/reference/node/configuration)
+
+### [Felix](https://docs.projectcalico.org/v3.0/reference/felix/configuration)
+
 ## other
 
 Integration Guide  
 
 https://docs.projectcalico.org/v3.0/getting-started/kubernetes/installation/integration  
+
+reference
+
+https://docs.projectcalico.org/v3.0/reference/  
 

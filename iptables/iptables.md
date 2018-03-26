@@ -1,8 +1,9 @@
 # iptables
 
-## Iptables(简体中文)介绍
+## Iptables
 
-https://wiki.archlinux.org/index.php/Iptables_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)  
+https://wiki.archlinux.org/index.php/Iptables  
+https://wiki.archlinux.org/index.php/Iptables_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)  (简体中文)  
 
 ## offical
 

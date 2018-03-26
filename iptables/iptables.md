@@ -11,3 +11,4 @@ https://netfilter.org/projects/iptables/index.html
 ## Iptables Tutorial 1.2.2
 
 https://www.frozentux.net/iptables-tutorial/iptables-tutorial.html
+https://www.frozentux.net/iptables-tutorial/cn/iptables-tutorial-cn-1.1.19.html (中文翻译)   

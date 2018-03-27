@@ -1,5 +1,7 @@
 # iptables wiki
 
+iptables是Linux防火墙的用户态配置工具，防火墙在内核态中依赖netfilter；firewalld，类似于iptables，也是防火墙的用户态配置工具。  
+
 > https://en.wikipedia.org/wiki/Iptables
 
 iptables is a user-space utility program that allows a system administrator to configure the tables[2] 
@@ -44,3 +46,11 @@ local delivery is controlled by the "local-delivery" routing table: ip route sho
 - OUTPUT: Packets sent from the machine itself will be visiting this chain.  
 - POSTROUTING: Routing decision has been made. Packets enter this chain just before handing them off to the hardware.  
 
+Each rule in a chain contains the specification of which packets it matches. It may also contain a target (used for extensions) or verdict (one of the built-in decisions).  As a packet traverses a chain, each rule in turn is examined. If a rule does not match the packet, the packet is passed to the next rule. If a rule does match the packet, the rule takes the action indicated by the target/verdict, which may result in the packet being allowed to continue along the chain or it may not. Matches make up the large part of rulesets, as they contain the conditions packets are tested for. These can happen for about any layer in the OSI model, as with e.g. the --mac-source and -p tcp --dport parameters, and there are also protocol-independent matches, such as -m time.
+
+The packet continues to traverse the chain until either:  
+1. a rule matches the packet and decides the ultimate fate of the packet, for example by calling one of the ACCEPT or DROP, or a module returning such an ultimate fate; or  
+2. a rule calls the RETURN verdict, in which case processing returns to the calling chain; or  
+3. the end of the chain is reached; traversal either continues in the parent chain (as if RETURN was used), or the base chain policy, which is an ultimate fate, is used.  
+
+Targets also return a verdict like ACCEPT (NAT modules will do this) or DROP (e.g. the REJECT module), but may also imply CONTINUE (e.g. the LOG module; CONTINUE is an internal name) to continue with the next rule as if no target/verdict was specified at all.  

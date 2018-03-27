@@ -120,31 +120,18 @@ filter 表对应的内核模块为iptable_filter，包含三个规则链：
 上图列出了iptables命令行的基本格式，通过`man iptables`查看命令行格式：  
 ```
 iptables [-t table] {-A|-C|-D} chain rule-specification
-
 ip6tables [-t table] {-A|-C|-D} chain rule-specification
-
 iptables [-t table] -I chain [rulenum] rule-specification
-
 iptables [-t table] -R chain rulenum rule-specification
-
 iptables [-t table] -D chain rulenum
-
 iptables [-t table] -S [chain [rulenum]]
-
 iptables [-t table] {-F|-L|-Z} [chain [rulenum]] [options...]
-
 iptables [-t table] -N chain
-
 iptables [-t table] -X [chain]
-
 iptables [-t table] -P chain target
-
 iptables [-t table] -E old-chain-name new-chain-name
-
 rule-specification = [matches...] [target]
-
 match = -m matchname [per-match-options]
-
 target = -j targetname [per-target-options]
 ```
 

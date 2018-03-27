@@ -1,6 +1,6 @@
 # iptables防火墙原理详解
 
-> http://seanlook.com/2014/02/23/iptables-understand/
+> http://seanlook.com/2014/02/23/iptables-understand/  
 
 ## netfilter与iptables
 
@@ -136,3 +136,8 @@ rule-specification = [matches...] [target]
 match = -m matchname [per-match-options]
 target = -j targetname [per-target-options]
 ```
+
+## other 
+
+Iptables—包过滤（网络层）防火墙  
+> http://blog.51cto.com/wenzhongxiang/1265510  

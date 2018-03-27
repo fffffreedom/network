@@ -61,7 +61,8 @@ filter 表对应的内核模块为iptable_filter，包含三个规则链：
 
 ### security表
 
-
+This table is used for Mandatory Access Control (MAC) networking rules, such as those enabled by the SECMARK and CONNSECMARK targets.   
+man iptables
 
 ## chains and rules
 
@@ -130,9 +131,8 @@ iptables [-t table] -N chain
 iptables [-t table] -X [chain]
 iptables [-t table] -P chain target
 iptables [-t table] -E old-chain-name new-chain-name
+
 rule-specification = [matches...] [target]
 match = -m matchname [per-match-options]
 target = -j targetname [per-target-options]
 ```
-
-
